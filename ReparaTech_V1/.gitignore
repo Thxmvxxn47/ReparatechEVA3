@@ -1,0 +1,7 @@
+**/node_modules/
+**/dist/
+**/target/
+**/datos/
+**/.env
+**/.idea/
+**/.vscode/
