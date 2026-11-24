@@ -12,7 +12,7 @@ import {
   estadoBadgeClass,
 } from '../../data/db'
 import { api } from '../../data/api'
-import { EstadoBadge, Modal, Confirm, EmptyState, StatCard, StockBar } from '../../components/ui'
+import { PhotoCredits, EstadoBadge, Modal, Confirm, EmptyState, StatCard, StockBar } from '../../components/ui'
 
 const FL = ({ label, children }) => (
   <div className="mb-3">
@@ -1634,6 +1634,9 @@ export function AdminRepuestos({ toast }) {
             Inventario Repuestos
           </h5>
         </div>
+        <div className="a-card-body pb-0">
+          <PhotoCredits items={repuestos} />
+        </div>
         {repuestos.some((r) => r.stock <= 3) && (
           <div className="a-card-body" style={{ paddingBottom: 0 }}>
             <div className="rt-alert warning">
@@ -1673,11 +1676,7 @@ export function AdminRepuestos({ toast }) {
                       )}
                       <div>
                         <strong>{r.nombre}</strong>
-                        {r.fotoFuente && (
-                          <a className="photo-credit" href={r.fotoFuente} target="_blank" rel="noreferrer">
-                            {r.fotoCredito}
-                          </a>
-                        )}
+
                       </div>
                     </div>
                   </td>

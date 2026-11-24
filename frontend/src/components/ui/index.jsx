@@ -89,3 +89,24 @@ export function StatCard({ icon, iconColor, value, label, sub }) {
     </div>
   )
 }
+
+export function PhotoCredits({ items }) {
+  const credited = items.filter((item) => item.fotoFuente && item.fotoCredito)
+  if (!credited.length) return null
+  return (
+    <details className="catalog-photo-credits">
+      <summary>Créditos de las fotos</summary>
+      <ul>
+        {credited.map((item) => (
+          <li key={item.id}>
+            <strong>{item.nombre}</strong>{' · '}
+            <a href={item.fotoFuente} target="_blank" rel="noreferrer">{item.fotoCredito}</a>
+            {item.fotoLicencia && (
+              <>{' · '}<a href={item.fotoLicencia} target="_blank" rel="noreferrer">Licencia</a></>
+            )}
+          </li>
+        ))}
+      </ul>
+    </details>
+  )
+}
