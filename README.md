@@ -1,6 +1,6 @@
 # ReparaTech EVA3 · Presentación
 
-ReparaTech registra solicitudes de reparación desde el catálogo. El taller asigna técnicos y actualiza el estado de cada orden. El cliente puede seguirla en **Mis reparaciones**. Esta edición funciona sin pasarela de pago.
+ReparaTech registra solicitudes de reparación desde el catálogo. El taller asigna técnicos y actualiza el estado de cada orden. El cliente puede seguirla en **Compras**. Esta edición incluye un pago de demostración sin conexión a una pasarela. Para comprar equipos, acepta exclusivamente los datos ficticios del formulario. No transmite datos de tarjeta ni realiza cobros.
 
 ## Arranque
 
@@ -24,6 +24,8 @@ npm run dev
 - Vite dirige `/api` al backend en el puerto 8080. H2 guarda los datos de esta edición en `backend/datos/`. Arranca desde la copia recién extraída para cargar el plantel actualizado. Si importas una base anterior, conserva sus nombres y registros ya existentes.
 - Las credenciales son para demostración local.
 
+En **Servicios → Smartphones, Laptops o Tablets** puedes simular la compra de un equipo. La API usa el precio referencial del catálogo y registra la compra aprobada en **Compras**. Agrega equipos y servicios al mismo carrito. Pulsa **Continuar a la compra** para registrarlos en una sola orden. Completa la dirección y comuna de entrega, escribe los datos de demostración que aparecen en pantalla y pulsa **Confirmar compra**. Si la API registra la orden, se muestra el comprobante. Es una venta de demostración, sin inventario ni cobro real.
+
 ## Cuentas de demostración
 
 | Nombre | Rol | Usuario | Contraseña |
@@ -41,8 +43,8 @@ npm run dev
 
 ## Guion EVA3
 
-1. Entra como cliente, agrega un servicio al carrito y registra una solicitud. Spring Boot toma los precios del catálogo y devuelve el código de la orden.
-2. Entra como Thomas, abre **Órdenes / Boletas** y asigna la orden. Entra con la cuenta del técnico asignado y cambia el estado. El cliente puede consultar el avance en **Mis reparaciones**.
+1. Entra como cliente, agrega un servicio al carrito y continúa al pago simulado. Puedes probar el rechazo y después la aprobación. Solo al simular la aprobación se registra la solicitud. Spring Boot toma los precios del catálogo y devuelve el código de la orden.
+2. Entra como Thomas, abre **Órdenes / Boletas** y asigna la orden. Entra con la cuenta del técnico asignado y cambia el estado. El cliente puede consultar el avance en **Compras**.
 3. Entra como Maximiliano para mostrar el plantel y el CRUD de servicios o repuestos. Desde Swagger, inicia sesión con `POST /api/auth/login` y usa el JWT como `Authorization: Bearer` en las rutas protegidas.
 4. Recarga la app con sesión iniciada para demostrar la renovación por cookie HttpOnly. El proyecto contiene un backend Spring Boot organizado en controladores, servicios y repositorios, más un frontend React separado.
 5. Para verificar la entrega con JDK 21, ejecuta `mvn test` en backend y `npm run build` en frontend. El ZIP original trae un comando Karma sin archivo de configuración, por lo que esa suite de frontend no se puede ejecutar con el material adjunto.
