@@ -14,7 +14,7 @@ import {
   BlogPage,
   DetalleBlogPage,
   ContactoPage,
-  CheckoutPage,
+  ComprarEquipoPage,
 } from './pages/tienda'
 
 import {
@@ -35,64 +35,35 @@ import { serviciosDB, formatCLP, loadPublic, loadPrivate, clearPrivate, ordenesD
 import { renew, logout as apiLogout } from './data/api'
 
 function CartDrawer({ open, onClose, carrito, onRemove, onCheckout }) {
-  const total = carrito.reduce((s, i) => s + serviciosDB.precioConDescuento(i), 0)
+  const total = carrito.reduce((suma, item) => suma + (item.tipoLinea === 'equipo'
+    ? item.precio_referencial : serviciosDB.precioConDescuento(item)), 0)
+
   return (
     <>
       <div className={`cart-drawer-overlay ${open ? 'show' : ''}`} onClick={onClose} />
-      <div className={`cart-drawer ${open ? 'open' : ''}`}>
+      <div className={`cart-drawer ${open ? 'open' : ''}`} inert={open ? undefined : ''}>
         <div className="cart-header">
-          <h4> Carrito de servicios</h4>
-          <button
-            onClick={onClose}
-            style={{ background: 'none', border: 'none', fontSize: '1.3rem', cursor: 'pointer' }}
-          >
-            ×
-          </button>
+          <h4>Carrito</h4>
+          <button type="button" className="btn-rt btn-ghost-rt" aria-label="Cerrar carrito" onClick={onClose}>×</button>
         </div>
         <div className="cart-items">
-          {carrito.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--rt-gray)' }}>
-              <div style={{ fontSize: '2.5rem', opacity: 0.3 }}></div>
-              <p style={{ marginTop: '0.5rem', fontSize: '0.88rem' }}>Tu carrito está vacío</p>
-            </div>
-          ) : (
-            carrito.map((s, i) => (
-              <div key={i} className="cart-item">
-                <div className="ci-icon">{s.icono}</div>
-                <div className="ci-info">
-                  <div className="ci-name">{s.nombre}</div>
-                  <div className="ci-price">{formatCLP(serviciosDB.precioConDescuento(s))}</div>
-                </div>
-                <button
-                  onClick={() => onRemove(i)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: 'var(--rt-danger)',
-                    cursor: 'pointer',
-                    fontSize: '1.1rem',
-                  }}
-                >
-                  ×
-                </button>
+          {!carrito.length && <p className="text-center my-4">Tu carrito está vacío</p>}
+          {carrito.map((item, i) => (
+            <div key={`${item.id}-${i}`} className="cart-item">
+              <div className="ci-info">
+                <div className="ci-name">{item.nombre}</div>
+                <div className="ci-price">{formatCLP(item.tipoLinea === 'equipo'
+                  ? item.precio_referencial : serviciosDB.precioConDescuento(item))}</div>
               </div>
-            ))
-          )}
+              <button type="button" className="btn-rt btn-ghost-rt"
+                aria-label={`Quitar ${item.nombre}`} onClick={() => onRemove(i)}>×</button>
+            </div>
+          ))}
         </div>
         <div className="cart-footer">
-          <div className="cart-total">
-            <span>Total</span>
-            <span style={{ color: 'var(--rt-blue)' }}>{formatCLP(total)}</span>
-          </div>
-          <button
-            className="btn-full btn-cyan-full"
-            disabled={carrito.length === 0}
-            onClick={() => {
-              onCheckout()
-              onClose()
-            }}
-          >
-            Solicitar reparación
+          <div className="cart-total"><span>Total</span><strong>{formatCLP(total)}</strong></div>
+          <button type="button" className="btn-full btn-cyan-full" disabled={!carrito.length} onClick={onCheckout}>
+            Continuar a la compra
           </button>
         </div>
       </div>
@@ -149,8 +120,8 @@ function MisReparaciones({ cliente }) {
   }, [])
   return (
     <section style={{ maxWidth: 1000, margin: '2rem auto', padding: '1rem' }}>
-      <h2>Mis reparaciones</h2>
-      <p>Consulta el estado de tus dispositivos registrados.</p>
+      <h2>Compras</h2>
+      <p>Consulta el estado de tus solicitudes y compras de demostración.</p>
       <button className="btn-rt btn-primary-rt" onClick={actualizar}>
         Actualizar estados
       </button>
@@ -169,7 +140,7 @@ function MisReparaciones({ cliente }) {
             {ordenes.map((o) => (
               <tr key={o.id}>
                 <td>{o.id}</td>
-                <td>{o.dispositivo}</td>
+                <td>{o.dispositivo}{['Compra', 'Compra y reparación'].includes(o.tipoOrden) && <small className="d-block">{o.tipoOrden}</small>}</td>
                 <td>{o.estado}</td>
                 <td>{formatCLP(o.costoTotal)}</td>
               </tr>
@@ -310,23 +281,20 @@ export default function App() {
     if (ACCESS[adminUser?.rol]?.includes(page)) setAdminPage(page)
   }
 
-  const addCart = (s) => {
-    setCarrito((p) => [...p, s])
-    toast(`${s.nombre} agregado al carrito`)
+  const agregarAlCarrito = (item, tipoLinea) => {
+    if (carrito.length >= 30) {
+      toast('El carrito admite hasta 30 artículos.', 'error')
+      return
+    }
+    setCarrito(actual => [...actual, { ...item, tipoLinea }])
     setCartOpen(true)
   }
-  const removeCart = (i) => setCarrito((p) => p.filter((_, idx) => idx !== i))
+  const addCart = servicio => agregarAlCarrito(servicio, 'servicio')
+  const agregarEquipo = equipo => agregarAlCarrito(equipo, 'equipo')
+  const removeCart = indice => setCarrito(actual => actual.filter((_, i) => i !== indice))
   const goCheckout = () => {
-    if (!clienteLogueado) {
-      toast('Inicia sesión para registrar una reparación', 'error')
-      setStorePage('login')
-    } else setStorePage('comprar')
-  }
-
-  const solicitudCreada = (orden) => {
-    setCarrito([])
-    setStorePage('mis-reparaciones')
-    toast(`Solicitud ${orden.id} registrada`)
+    setCartOpen(false)
+    if (carrito.length) navStore(clienteLogueado ? 'comprar' : 'login', clienteLogueado ? null : 'comprar')
   }
 
   const pageProps = { toast }
@@ -416,8 +384,10 @@ export default function App() {
       />
 
       {storePage === 'home' && <HomePage onNav={navStore} onAddCart={addCart} />}
-      {storePage === 'servicios' && <ServiciosPage onNav={navStore} onAddCart={addCart} />}
-      {storePage === 'detalle-servicio' && <ServiciosPage onNav={navStore} onAddCart={addCart} />}
+      {storePage === 'servicios' && (
+        <ServiciosPage key={extraId || 'Todos'} categoriaInicial={extraId || 'Todos'} onNav={navStore} onAddCart={addCart} onAddEquipo={agregarEquipo} />
+      )}
+      {storePage === 'detalle-servicio' && <ServiciosPage onNav={navStore} onAddCart={addCart} onAddEquipo={agregarEquipo} />}
       {storePage === 'ofertas' && <OfertasPage onNav={navStore} onAddCart={addCart} />}
       {storePage === 'categorias' && <CategoriasPage onNav={navStore} onAddCart={addCart} />}
       {storePage === 'nosotros' && <NosotrosPage />}
@@ -425,14 +395,10 @@ export default function App() {
       {storePage === 'blog-detalle' && <DetalleBlogPage blogId={extraId} onNav={navStore} />}
       {storePage === 'contacto' && <ContactoPage toast={toast} />}
       {storePage === 'registro' && <RegistroPage onNav={navStore} onLogin={loginUser} />}
-      {storePage === 'login' && <LoginClientePage onNav={navStore} onLogin={loginUser} />}
+      {storePage === 'login' && <LoginClientePage onNav={navStore} onLogin={loginUser} destino={extraId} />}
       {storePage === 'comprar' && (
-        <CheckoutPage
-          carrito={carrito}
-          clienteLogueado={clienteLogueado}
-          onResult={solicitudCreada}
-          toast={toast}
-        />
+        <ComprarEquipoPage carrito={carrito} cliente={clienteLogueado} onNav={navStore}
+          onComprado={() => setCarrito([])} />
       )}
       {storePage === 'mis-reparaciones' && clienteLogueado && (
         <MisReparaciones cliente={clienteLogueado} />

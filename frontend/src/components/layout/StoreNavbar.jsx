@@ -47,7 +47,7 @@ export default function StoreNavbar({
                 onClick={() => onNav('mis-reparaciones')}
                 style={{ fontSize: '0.78rem' }}
               >
-                Mis reparaciones
+                Compras
               </button>
               <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.83rem' }}>
                 {clienteLogueado.nombre}

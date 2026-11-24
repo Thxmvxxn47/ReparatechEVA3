@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import {
   serviciosDB,
   categoriasDB,
@@ -9,7 +9,25 @@ import {
   ordenesDB,
 } from '../../data/db'
 
-function Img({ src, alt, style, fallback }) {
+const inputStyle = {
+  width: '100%',
+  padding: '9px 12px',
+  border: '1px solid #dde3ea',
+  borderRadius: 8,
+  fontSize: '0.88rem',
+  fontFamily: 'inherit',
+  outline: 'none',
+  boxSizing: 'border-box',
+}
+const labelStyle = {
+  display: 'block',
+  fontSize: '0.82rem',
+  fontWeight: 600,
+  color: '#374151',
+  marginBottom: 4,
+}
+
+function Img({ src, alt, style, fallback, fit = 'cover', loading = 'lazy' }) {
   const [err, setErr] = useState(false)
   if (!src || err)
     return (
@@ -32,9 +50,9 @@ function Img({ src, alt, style, fallback }) {
     <img
       src={src}
       alt={alt}
-      style={{ ...style, objectFit: 'cover' }}
+      style={{ ...style, objectFit: fit }}
       onError={() => setErr(true)}
-      loading="lazy"
+      loading={loading}
     />
   )
 }
@@ -84,21 +102,6 @@ export function HomePage({ onNav, onAddCart }) {
             onClick={() => onNav('servicios')}
           >
             Ver servicios
-          </button>
-          <button
-            style={{
-              background: 'rgba(255,255,255,0.15)',
-              color: '#fff',
-              border: '2px solid rgba(255,255,255,0.4)',
-              padding: '12px 28px',
-              borderRadius: 10,
-              fontWeight: 700,
-              fontSize: '1rem',
-              cursor: 'pointer',
-            }}
-            onClick={() => onNav('comprar')}
-          >
-            Solicitar reparación
           </button>
         </div>
 
@@ -329,10 +332,9 @@ export function HomePage({ onNav, onAddCart }) {
                 overflow: 'hidden',
                 cursor: 'pointer',
               }}
-              onClick={() => onNav('servicios')}
+              onClick={() => onNav('servicios', d.categoria)}
             >
               <Img src={d.imagen} alt={d.nombre} style={{ width: '100%', height: 130 }} fallback="Foto pendiente" />
-              {d.fotoFuente && <a className="photo-credit" href={d.fotoFuente} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()}>{d.fotoCredito}</a>}
               <div style={{ padding: '10px' }}>
                 <div style={{ fontWeight: 700, fontSize: '0.83rem' }}>{d.nombre}</div>
                 <div style={{ fontSize: '0.72rem', color: '#6b7280' }}>
@@ -457,21 +459,41 @@ export function HomePage({ onNav, onAddCart }) {
   )
 }
 
-export function ServiciosPage({ onNav, onAddCart }) {
-  const servicios = serviciosDB.getAll()
-  const categorias = categoriasDB.getAll()
-  const [cat, setCat] = useState('Todos')
-  const [buscar, setBuscar] = useState('')
+const categoriasDeVenta = {
+  Smartphones: 'Teléfonos',
+  Laptops: 'Laptops',
+  Tablets: 'Tablets',
+}
 
-  const filtrados = useMemo(
-    () =>
-      servicios.filter(
-        (s) =>
-          (!buscar || s.nombre.toLowerCase().includes(buscar.toLowerCase())) &&
-          (cat === 'Todos' || s.categoria === cat),
-      ),
-    [cat, buscar, servicios],
-  )
+export function ServiciosPage({ onNav, onAddCart, onAddEquipo, categoriaInicial = 'Todos' }) {
+  const categorias = categoriasDB.getAll()
+  const [cat, setCat] = useState(categoriaInicial)
+  const [buscar, setBuscar] = useState('')
+  const servicios = cat === 'Todos' ? serviciosDB.getAll() : serviciosDB.getByCategoria(cat)
+  const termino = buscar.trim().toLocaleLowerCase('es')
+  const filtrados = servicios.filter((servicio) => servicio.nombre.toLocaleLowerCase('es').includes(termino))
+
+  useEffect(() => {
+    const archivos = new Set(
+      dispositivosDB.getAll()
+        .filter(equipo => Object.hasOwn(categoriasDeVenta, equipo.categoria))
+        .map(equipo => equipo.imagen)
+        .filter(Boolean)
+    )
+    const precargar = () => {
+      for (const url of archivos) {
+        const imagen = new Image()
+        imagen.fetchPriority = 'low'
+        imagen.src = url
+      }
+    }
+    if (typeof window.requestIdleCallback === 'function') {
+      const id = window.requestIdleCallback(precargar, { timeout: 1200 })
+      return () => window.cancelIdleCallback(id)
+    }
+    const id = window.setTimeout(precargar, 250)
+    return () => window.clearTimeout(id)
+  }, [])
 
   return (
     <div style={{ maxWidth: 1200, margin: '0 auto', padding: '2rem 1.5rem' }}>
@@ -520,6 +542,7 @@ export function ServiciosPage({ onNav, onAddCart }) {
           <button
             key={c}
             onClick={() => setCat(c)}
+            aria-pressed={cat === c}
             style={{
               padding: '6px 16px',
               borderRadius: 30,
@@ -535,6 +558,31 @@ export function ServiciosPage({ onNav, onAddCart }) {
           </button>
         ))}
       </div>
+      {Object.hasOwn(categoriasDeVenta, cat) && (
+        <section className="mb-4" aria-labelledby="equipos-en-venta">
+          <h3 id="equipos-en-venta" className="section-title">{categoriasDeVenta[cat]} en venta</h3>
+          <div className="service-grid">
+            {dispositivosDB.getByCategoria(cat)
+              .filter(equipo => equipo.precio_referencial > 0 && equipo.nombre.toLocaleLowerCase('es').includes(termino))
+              .map(equipo => (
+                <article className="service-card sale-card" key={equipo.id}>
+                  <div className="sale-card-media">
+                    <Img key={equipo.imagen} src={equipo.imagen} alt={equipo.nombre}
+                      style={{ width: '100%', height: '100%', display: 'block' }}
+                      fit="contain" loading="eager" fallback="Foto pendiente" />
+                  </div>
+                  <div className="sc-body">
+                    <h4 className="sc-name">{equipo.nombre}</h4>
+                    <p className="sc-price">{formatCLP(equipo.precio_referencial)}</p>
+                    <button type="button" className="btn-rt btn-primary-rt"
+                      onClick={() => onAddEquipo(equipo)}>Agregar {equipo.nombre} al carrito</button>
+                  </div>
+                </article>
+              ))}
+          </div>
+          <h3 className="section-title mt-4">Servicios para {categoriasDeVenta[cat].toLocaleLowerCase('es')}</h3>
+        </section>
+      )}
       <div
         style={{
           display: 'grid',
@@ -542,6 +590,7 @@ export function ServiciosPage({ onNav, onAddCart }) {
           gap: '1.2rem',
         }}
       >
+        {!filtrados.length && <p role="status">No encontramos servicios para esta búsqueda.</p>}
         {filtrados.map((s) => {
           const precio = serviciosDB.precioConDescuento(s)
           return (
@@ -620,22 +669,6 @@ export function ServiciosPage({ onNav, onAddCart }) {
                     }}
                   >
                     + Carrito
-                  </button>
-                  <button
-                    onClick={() => onNav('comprar')}
-                    style={{
-                      flex: 1,
-                      background: '#f4f7fb',
-                      color: '#0f4c81',
-                      border: '1px solid #dde3ea',
-                      padding: '8px',
-                      borderRadius: 8,
-                      fontWeight: 600,
-                      fontSize: '0.83rem',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    Solicitar
                   </button>
                 </div>
               </div>
@@ -855,7 +888,6 @@ export function CategoriasPage({ onAddCart }) {
                       style={{ width: '100%', height: 110 }}
                       fallback="Foto pendiente"
                     />
-              {d.fotoFuente && <a className="photo-credit" href={d.fotoFuente} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()}>{d.fotoCredito}</a>}
                     <div style={{ padding: '8px 10px' }}>
                       <div style={{ fontWeight: 700, fontSize: '0.78rem' }}>{d.nombre}</div>
                       <div style={{ fontSize: '0.7rem', color: '#6b7280' }}>{d.marca}</div>
@@ -1552,7 +1584,7 @@ export function RegistroPage({ onNav, onLogin }) {
   )
 }
 
-export function LoginClientePage({ onNav, onLogin }) {
+export function LoginClientePage({ onNav, onLogin, destino }) {
   const [form, setForm] = useState({ correo: '', password: '' })
   const [err, setErr] = useState('')
   const submit = async (e) => {
@@ -1561,7 +1593,7 @@ export function LoginClientePage({ onNav, onLogin }) {
       const c = await clientesDB.login(form.correo, form.password)
       if (c.rol !== 'cliente') throw new Error('Utiliza el acceso al panel')
       await onLogin?.(c)
-      onNav('home')
+      onNav(destino || 'home')
     } catch (ex) {
       setErr(ex.message)
     }
@@ -1676,52 +1708,191 @@ export function LoginClientePage({ onNav, onLogin }) {
   )
 }
 
-export function CheckoutPage({ carrito, clienteLogueado, onResult, toast }) {
+const tarjetaDemo = { numero: '4242424242424242', fecha: '12/30', codigo: '123' }
+const numeroDeRechazo = '4000000000000002'
+
+export function ComprarEquipoPage({ carrito, cliente, onNav, onComprado }) {
+  const resumen = Object.values(carrito.reduce((grupos, item) => {
+    if (!grupos[item.id]) grupos[item.id] = { item, cantidad: 0 }
+    grupos[item.id].cantidad++
+    return grupos
+  }, {}))
+  const precioUnitario = item => item.tipoLinea === 'equipo' ? item.precio_referencial : serviciosDB.precioConDescuento(item)
+  const total = carrito.reduce((suma, item) => suma + precioUnitario(item), 0)
+  const equipos = carrito.filter(item => item.tipoLinea === 'equipo')
+  const servicios = carrito.filter(item => item.tipoLinea === 'servicio')
   const [dispositivo, setDispositivo] = useState('')
   const [falla, setFalla] = useState('')
+  const [tarjeta, setTarjeta] = useState({ titular: '', numero: '', fecha: '', codigo: '' })
+  const [direccion, setDireccion] = useState('')
+  const [comuna, setComuna] = useState('')
   const [enviando, setEnviando] = useState(false)
-  const total = carrito.reduce((suma, servicio) => suma + serviciosDB.precioConDescuento(servicio), 0)
+  const [error, setError] = useState('')
+  const [orden, setOrden] = useState(null)
 
-  async function solicitar(event) {
+  if (!orden && !carrito.length) return <p role="status" className="store-container">Tu carrito está vacío.</p>
+
+  const nombreCliente = [cliente?.nombre, cliente?.apellido].filter(Boolean).join(' ')
+  const cambiar = (campo) => (event) => {
+    let valor = event.target.value
+    if (campo === 'numero') valor = valor.replace(/[^0-9]/g, '').slice(0, 16).match(/.{1,4}/g)?.join(' ') || ''
+    if (campo === 'fecha') {
+      const digitos = valor.replace(/[^0-9]/g, '').slice(0, 4)
+      valor = digitos.length > 2 ? digitos.slice(0, 2) + '/' + digitos.slice(2) : digitos
+    }
+    if (campo === 'codigo') valor = valor.replace(/[^0-9]/g, '').slice(0, 3)
+    setTarjeta(actual => ({ ...actual, [campo]: valor }))
+    setError('')
+  }
+
+  async function pagar(event) {
     event.preventDefault()
-    if (enviando || !clienteLogueado?.clienteId || carrito.length === 0) return
+    if (enviando || !cliente || orden) return
+    const numero = tarjeta.numero.replace(/\s/g, '')
+    const esAprobacion = numero === tarjetaDemo.numero
+    const esRechazo = numero === numeroDeRechazo
+    if ((!esAprobacion && !esRechazo) || !tarjeta.titular.trim()
+      || tarjeta.fecha.trim() !== tarjetaDemo.fecha || tarjeta.codigo.trim() !== tarjetaDemo.codigo) {
+      setError('Revisa el número, vencimiento y CVV indicados en los datos de demostración.')
+      return
+    }
+    if (esRechazo) {
+      setError('La tarjeta de prueba fue rechazada. La compra no se registró.')
+      return
+    }
+    if (equipos.length && (!direccion.trim() || !comuna.trim())) {
+      setError('Completa la dirección y la comuna de entrega.')
+      return
+    }
+    setError('')
     setEnviando(true)
     try {
-      const orden = await ordenesDB.create({
-        dispositivo: dispositivo.trim(),
-        falla: falla.trim(),
-        servicioId: carrito[0].id,
-        servicioIds: carrito.map(servicio => servicio.id),
-      })
-      onResult(orden)
+      setOrden(await ordenesDB.create({
+        ...(equipos.length && {
+          equipoIds: equipos.map(equipo => equipo.id),
+          direccionEntrega: direccion.trim(),
+          comunaEntrega: comuna.trim(),
+        }),
+        ...(servicios.length && {
+          servicioIds: servicios.map(servicio => servicio.id),
+          dispositivo: dispositivo.trim(),
+          falla: falla.trim(),
+        }),
+      }, { notificarError: false }))
+      onComprado()
+      setTarjeta({ titular: '', numero: '', fecha: '', codigo: '' })
     } catch (error) {
-      toast(error.message, 'error')
+      setError(error.message === 'Bad Request'
+        ? 'No se pudo registrar la compra. Si la aplicación ya estaba abierta, reinicia Spring Boot y vuelve a intentar.'
+        : error.message)
     } finally {
       setEnviando(false)
     }
   }
 
+  if (orden) {
+    return (
+      <section className="store-container repair-checkout">
+        <h1>Compra exitosa</h1>
+        <div className="a-card repair-form purchase-receipt">
+          <i className="bi bi-check-circle-fill" aria-hidden="true" />
+          <p role="status">Tu compra de demostración quedó registrada. No se realizó ningún cobro.</p>
+          <dl className="mb-0">
+            <dt>Número de orden</dt><dd>{orden.id}</dd>
+            <dt>Detalle</dt><dd>{orden.dispositivo}</dd>
+            <dt>Total</dt><dd>{formatCLP(orden.costoTotal)}</dd>
+            {orden.direccionEntrega && <><dt>Entrega</dt><dd>{orden.direccionEntrega}, {orden.comunaEntrega}</dd></>}
+          </dl>
+          <button type="button" className="btn-rt btn-primary-rt"
+            onClick={() => onNav('mis-reparaciones')}>Ver mis compras</button>
+          <button type="button" className="btn-rt btn-ghost-rt"
+            onClick={() => onNav('servicios')}>Volver al catálogo</button>
+        </div>
+      </section>
+    )
+  }
+
   return (
-    <section className="store-container repair-checkout">
-      <h1>Solicitar reparación</h1>
-      <form className="a-card repair-form" onSubmit={solicitar}>
-        <label htmlFor="equipo">Marca y modelo</label>
-        <input id="equipo" className="f-input" value={dispositivo}
-          onChange={e => setDispositivo(e.target.value)} required maxLength={120} />
-        <label htmlFor="falla">¿Qué problema presenta el equipo?</label>
-        <textarea id="falla" className="f-input" value={falla}
-          onChange={e => setFalla(e.target.value)} required maxLength={1000} rows={4} />
-        <ul className="repair-summary">
-          {carrito.map((servicio, index) => (
-            <li key={index}><span>{servicio.nombre}</span><strong>{formatCLP(serviciosDB.precioConDescuento(servicio))}</strong></li>
+    <section className="store-container purchase-page">
+      <h1>Confirmar compra</h1>
+      <div className="purchase-layout">
+      <form className="a-card repair-form purchase-checkout" onSubmit={pagar} autoComplete="off">
+        <p className="purchase-demo">Modo demostración. Usa datos ficticios. No se realiza ningún cobro.</p>
+        {cliente ? (
+          <>
+            {equipos.length > 0 && (
+              <>
+            <h2 className="purchase-section-title">Entrega a domicilio</h2>
+            <label htmlFor="entrega-direccion">Dirección</label>
+            <input id="entrega-direccion" className="f-input" value={direccion}
+              onChange={event => setDireccion(event.target.value)} placeholder="Calle, número y departamento"
+              maxLength={160} required disabled={enviando} />
+            <label htmlFor="entrega-comuna">Comuna</label>
+            <input id="entrega-comuna" className="f-input" value={comuna}
+              onChange={event => setComuna(event.target.value)} placeholder="Ej. Santiago"
+              maxLength={80} required disabled={enviando} />
+              </>
+            )}
+            {servicios.length > 0 && (
+              <>
+                <h2 className="purchase-section-title">Datos de reparación</h2>
+                <label htmlFor="reparacion-equipo">Marca y modelo del equipo a reparar</label>
+                <input id="reparacion-equipo" className="f-input" value={dispositivo}
+                  onChange={event => setDispositivo(event.target.value)} required maxLength={120} disabled={enviando} />
+                <label htmlFor="reparacion-falla">Problema que presenta</label>
+                <textarea id="reparacion-falla" className="f-input" value={falla}
+                  onChange={event => setFalla(event.target.value)} required maxLength={1000} disabled={enviando} />
+              </>
+            )}
+            <h2 className="purchase-section-title">Tarjeta</h2>
+            <p className="purchase-demo">Datos de demostración: 4242 4242 4242 4242 · 12/30 · CVV 123.</p>
+            <label htmlFor="demo-titular">Nombre del titular</label>
+            <input id="demo-titular" className="f-input" value={tarjeta.titular}
+              onChange={cambiar('titular')} placeholder={nombreCliente} required maxLength={40} disabled={enviando} />
+            <label htmlFor="demo-numero">Número de tarjeta</label>
+            <input id="demo-numero" className="f-input" value={tarjeta.numero}
+              onChange={cambiar('numero')} placeholder="4242 4242 4242 4242" inputMode="numeric" required maxLength={19} disabled={enviando} />
+            <div className="row g-3">
+              <div className="col-6">
+                <label htmlFor="demo-fecha">Vencimiento (MM/AA)</label>
+                <input id="demo-fecha" className="f-input" value={tarjeta.fecha}
+                  onChange={cambiar('fecha')} placeholder="12/30" required maxLength={5} disabled={enviando} />
+              </div>
+              <div className="col-6">
+                <label htmlFor="demo-codigo">CVV</label>
+                <input id="demo-codigo" className="f-input" type="password" value={tarjeta.codigo}
+                  onChange={cambiar('codigo')} placeholder="123" inputMode="numeric" required maxLength={3} disabled={enviando} />
+              </div>
+            </div>
+            {error && <p role="alert" className="rt-alert danger">{error}</p>}
+            <button type="submit" className="btn-rt btn-primary-rt" disabled={enviando}>
+              {enviando ? 'Registrando…' : 'Confirmar compra'}
+            </button>
+          </>
+        ) : (
+          <button type="button" className="btn-rt btn-primary-rt"
+            onClick={() => onNav('login', 'comprar')}>Iniciar sesión para comprar</button>
+        )}
+        <button type="button" className="btn-rt btn-ghost-rt" disabled={enviando}
+          onClick={() => onNav('servicios')}>Volver al catálogo</button>
+      </form>
+      <aside className="a-card repair-form purchase-order" aria-labelledby="resumen-compra">
+        <h2 id="resumen-compra">Resumen de compra</h2>
+        <ul className="purchase-products">
+          {resumen.map(({ item, cantidad }) => (
+            <li key={item.id}>
+              <Img src={item.imagen} alt="" fit="contain" fallback="Sin foto"
+                style={{ width: 72, height: 58, display: 'block' }} />
+              <div>
+                <strong>{item.nombre}</strong>
+                <small>{cantidad} × {formatCLP(precioUnitario(item))}</small>
+              </div>
+            </li>
           ))}
         </ul>
-        <p><strong>Total estimado {formatCLP(total)}</strong></p>
-        <button className="btn-rt btn-primary-rt" type="submit"
-          disabled={enviando || !carrito.length || !dispositivo.trim() || !falla.trim()}>
-          {enviando ? 'Registrando…' : 'Registrar solicitud'}
-        </button>
-      </form>
+        <div className="purchase-summary"><span>Total</span><strong>{formatCLP(total)}</strong></div>
+      </aside>
+      </div>
     </section>
   )
 }
