@@ -6,13 +6,14 @@ export function setAccessToken(t) {
   accessToken = t
 }
 export async function api(path, options = {}) {
+  const { notificarError = true, ...peticion } = options
   const run = async () => {
     const headers = { ...options.headers }
     if (options.body !== undefined && !(options.body instanceof FormData))
       headers['Content-Type'] = 'application/json'
     if (accessToken) headers.Authorization = `Bearer ${accessToken}`
     return fetch(`${API}${path}`, {
-      ...options,
+      ...peticion,
       headers,
       credentials: 'include',
       body: options.body === undefined ? undefined : JSON.stringify(options.body),
@@ -35,7 +36,7 @@ export async function api(path, options = {}) {
       const j = await res.json()
       msg = j.detail || j.message || j.error || msg
     } catch {}
-    window.dispatchEvent(new CustomEvent('rt-api-error', { detail: msg }))
+    if (notificarError) window.dispatchEvent(new CustomEvent('rt-api-error', { detail: msg }))
     throw new Error(msg)
   }
   if (res.status === 204) return null

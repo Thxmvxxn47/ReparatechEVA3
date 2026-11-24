@@ -45,8 +45,9 @@ export async function refreshType(t) {
   sync(t, await api('/' + t))
   return getAll(t)
 }
-async function create(t, data) {
+async function create(t, data, options) {
   const n = await api(t === 'ordenes' && activeRole === 'cliente' ? '/mis-ordenes' : '/' + t, {
+    ...options,
     method: 'POST',
     body: data,
   })
@@ -72,16 +73,26 @@ async function remove(t, id) {
 const crud = (t) => ({
   getAll: () => getAll(t),
   getById: (id) => getById(t, id),
-  create: (d) => create(t, d),
+  create: (d, options) => create(t, d, options),
   update: (id, d) => update(t, id, d),
   delete: (id) => remove(t, id),
 })
 export const clientesDB = { ...crud('clientes'), login: apiLogin, register: apiRegister }
 export const tecnicosDB = crud('tecnicos')
+// La categoría describe el trabajo. Un servicio puede aplicarse a varios equipos.
+const equiposPorServicio = {
+  SE001: ['Smartphones', 'Laptops', 'Tablets'],
+  SE002: ['Smartphones', 'Tablets'],
+  SE003: ['Smartphones', 'Laptops', 'Tablets'],
+  SE005: ['Smartphones', 'Laptops', 'Tablets'],
+  SE006: ['Laptops'],
+  SE007: ['Laptops'],
+}
+
 export const serviciosDB = {
   ...crud('servicios'),
   getEnOferta: () => getAll('servicios').filter((s) => s.enOferta),
-  getByCategoria: (cat) => getAll('servicios').filter((s) => s.categoria === cat),
+  getByCategoria: (cat) => getAll('servicios').filter((s) => s.categoria === cat || equiposPorServicio[s.id]?.includes(cat)),
   precioConDescuento: (s) => (s.enOferta ? Math.round(s.precio * (1 - s.descuento / 100)) : s.precio),
 }
 export const dispositivosDB = {
