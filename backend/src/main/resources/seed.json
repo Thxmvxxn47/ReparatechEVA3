@@ -1,0 +1,766 @@
+{
+  "clientes": [
+    {
+      "id": 1,
+      "nombre": "Rodrigo",
+      "apellido": "Chacon",
+      "correo": "rodrigo.chacon@reparatech.cl",
+      "telefono": "+56912345678",
+      "direccion": "Av. Providencia 1234, Santiago"
+    },
+    {
+      "id": 2,
+      "nombre": "Ana",
+      "apellido": "Torres",
+      "correo": "ana@hotmail.com",
+      "telefono": "+56987654321",
+      "direccion": "Los Leones 567, Providencia"
+    },
+    {
+      "id": 3,
+      "nombre": "Pedro",
+      "apellido": "Rojas",
+      "correo": "pedro@gmail.com",
+      "telefono": "+56955443322",
+      "direccion": "Ñuñoa 890, Santiago"
+    },
+    {
+      "id": 4,
+      "nombre": "Valentina",
+      "apellido": "Soto",
+      "correo": "vale@outlook.com",
+      "telefono": "+56933221100",
+      "direccion": "Maipú 456, Santiago"
+    }
+  ],
+  "tecnicos": [
+    {
+      "id": 1,
+      "nombre": "Darliette",
+      "apellido": "Loncopán",
+      "especialidad": "Smartphones",
+      "activo": true,
+      "ordenesActivas": 3
+    },
+    {
+      "id": 2,
+      "nombre": "Victor",
+      "apellido": "Gutierrez",
+      "especialidad": "Computadores",
+      "activo": true,
+      "ordenesActivas": 2
+    },
+    {
+      "id": 3,
+      "nombre": "Carlos",
+      "apellido": "Ramirez",
+      "especialidad": "Tablets",
+      "activo": true,
+      "ordenesActivas": 1
+    },
+    {
+      "id": 4,
+      "nombre": "Mizahel",
+      "apellido": "Huaman",
+      "especialidad": "Placa Base",
+      "activo": true,
+      "ordenesActivas": 4
+    },
+    {
+      "id": 5,
+      "nombre": "Sebastian",
+      "apellido": "Covarrubias",
+      "especialidad": "Smartphones",
+      "activo": true,
+      "ordenesActivas": 2
+    },
+    {
+      "id": 6,
+      "nombre": "Matias",
+      "apellido": "Estobar",
+      "especialidad": "Computadores",
+      "activo": true,
+      "ordenesActivas": 1
+    }
+  ],
+  "dispositivos": [
+    {
+      "id": "D001",
+      "nombre": "iPhone 16 Pro Max",
+      "marca": "Apple",
+      "categoria": "Smartphones",
+      "imagen": "https://upload.wikimedia.org/wikipedia/commons/7/71/IPhone_16_Pro_Max_%2854252162653%29.jpg",
+      "precio_referencial": 1199000,
+      "color": "Negro titanio",
+      "descripcion": "6.9\" Super Retina XDR, chip A18 Pro, cámara 48MP Fusion",
+      "fallas_comunes": [
+        "Pantalla rota",
+        "Batería agotada",
+        "Cámara sin enfocar",
+        "Botón roto"
+      ],
+      "fotoFuente": "https://commons.wikimedia.org/wiki/File:IPhone_16_Pro_Max_%2854252162653%29.jpg",
+      "fotoCredito": "メイド理世 · CC BY-SA 2.0",
+      "fotoLicencia": "https://creativecommons.org/licenses/by-sa/2.0/"
+    },
+    {
+      "id": "D002",
+      "nombre": "iPhone 15",
+      "marca": "Apple",
+      "categoria": "Smartphones",
+      "imagen": "https://upload.wikimedia.org/wikipedia/commons/3/3c/Back_view_of_iPhone_15_Blue.jpg",
+      "precio_referencial": 799000,
+      "color": "Azul",
+      "descripcion": "6.1\" Super Retina XDR, chip A16 Bionic, Dynamic Island",
+      "fallas_comunes": [
+        "Pantalla rota",
+        "Batería dura poco",
+        "Puerto carga dañado",
+        "Sin sonido"
+      ],
+      "fotoFuente": "https://commons.wikimedia.org/wiki/File:Back_view_of_iPhone_15_Blue.jpg",
+      "fotoCredito": "メイド理世 · CC BY-SA 4.0",
+      "fotoLicencia": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "D003",
+      "nombre": "Samsung Galaxy S25 Ultra",
+      "marca": "Samsung",
+      "categoria": "Smartphones",
+      "imagen": "https://upload.wikimedia.org/wikipedia/commons/1/1e/Samsung_Galaxy_S25_Ultra_2025.jpg",
+      "precio_referencial": 1299000,
+      "color": "Titanio gris",
+      "descripcion": "6.9\" Dynamic AMOLED 2X, Snapdragon 8 Elite, S Pen incluido",
+      "fallas_comunes": [
+        "Pantalla rota",
+        "S Pen no funciona",
+        "Batería",
+        "Módulo cámara"
+      ],
+      "fotoFuente": "https://commons.wikimedia.org/wiki/File:Samsung_Galaxy_S25_Ultra_2025.jpg",
+      "fotoCredito": "Captainmorlypogi1959 · CC BY-SA 4.0",
+      "fotoLicencia": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "D004",
+      "nombre": "Samsung Galaxy S24",
+      "marca": "Samsung",
+      "categoria": "Smartphones",
+      "imagen": "https://upload.wikimedia.org/wikipedia/commons/c/c3/Samsung_Galaxy_S24.jpg",
+      "precio_referencial": 799000,
+      "color": "Violeta",
+      "descripcion": "6.2\" Dynamic AMOLED 2X, Snapdragon 8 Gen 3, 50MP",
+      "fallas_comunes": [
+        "Pantalla rota",
+        "Batería",
+        "Puerto USB-C",
+        "Altavoz"
+      ],
+      "fotoFuente": "https://commons.wikimedia.org/wiki/File:Samsung_Galaxy_S24.jpg",
+      "fotoCredito": "Vis M · CC BY-SA 4.0",
+      "fotoLicencia": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "D005",
+      "nombre": "Xiaomi 14 Ultra",
+      "marca": "Xiaomi",
+      "categoria": "Smartphones",
+      "imagen": "https://upload.wikimedia.org/wikipedia/commons/b/b7/Shibuya-Tokyo---2024-08-28_066.jpg",
+      "precio_referencial": 699000,
+      "color": "Negro",
+      "descripcion": "6.73\" LTPO OLED, Snapdragon 8 Gen 3, cámara Leica 50MP",
+      "fallas_comunes": [
+        "Pantalla rota",
+        "Batería",
+        "Módulo cámara",
+        "Sin señal"
+      ],
+      "fotoFuente": "https://commons.wikimedia.org/wiki/File:Shibuya-Tokyo---2024-08-28_066.jpg",
+      "fotoCredito": "RuinDig/Yuki Uchida · CC BY 4.0",
+      "fotoLicencia": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    {
+      "id": "D006",
+      "nombre": "Google Pixel 9 Pro",
+      "marca": "Google",
+      "categoria": "Smartphones",
+      "imagen": "https://upload.wikimedia.org/wikipedia/commons/e/eb/Camera_of_Google_Pixel_9_Pro_-_1.jpg",
+      "precio_referencial": 999000,
+      "color": "Porcelana",
+      "descripcion": "6.3\" LTPO OLED, Google Tensor G4, IA avanzada integrada",
+      "fallas_comunes": [
+        "Pantalla rota",
+        "Batería",
+        "Cámara",
+        "Puerto carga"
+      ],
+      "fotoFuente": "https://commons.wikimedia.org/wiki/File:Camera_of_Google_Pixel_9_Pro_-_1.jpg",
+      "fotoCredito": "Kyu3a · CC BY-SA 4.0",
+      "fotoLicencia": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "id": "D007",
+      "nombre": "iPad Pro 13\" M4",
+      "marca": "Apple",
+      "categoria": "Tablets",
+      "imagen": "/catalogo/D007.jpg",
+      "precio_referencial": 1499000,
+      "color": "Plata",
+      "descripcion": "13\" Ultra Retina XDR OLED, chip M4, Apple Pencil Pro compatible",
+      "fallas_comunes": [
+        "Pantalla rota",
+        "Apple Pencil no conecta",
+        "Batería",
+        "Conector"
+      ],
+      "fotoFuente": "https://www.ifixit.com/Guide/iPad+Pro+13-Inch+Battery+Removal/197871",
+      "fotoCredito": "Nick Schultz y colaboradores / iFixit · CC BY-NC-SA 3.0",
+      "fotoLicencia": "https://creativecommons.org/licenses/by-nc-sa/3.0/"
+    },
+    {
+      "id": "D008",
+      "nombre": "iPad Air 11\" M2",
+      "marca": "Apple",
+      "categoria": "Tablets",
+      "imagen": "/catalogo/D008.jpg",
+      "precio_referencial": 799000,
+      "color": "Azul cielo",
+      "descripcion": "11\" Liquid Retina, chip M2, compatible con Apple Pencil USB-C",
+      "fallas_comunes": [
+        "Pantalla rota",
+        "Batería",
+        "Puerto USB-C",
+        "Sin WiFi"
+      ],
+      "fotoFuente": "https://www.ifixit.com/Guide/iPad+Air+6+11-Inch+Opening+Procedure/226757",
+      "fotoCredito": "Arthur Shi y colaboradores / iFixit · CC BY-NC-SA 3.0",
+      "fotoLicencia": "https://creativecommons.org/licenses/by-nc-sa/3.0/"
+    },
+    {
+      "id": "D009",
+      "nombre": "Samsung Galaxy Tab S10 Ultra",
+      "marca": "Samsung",
+      "categoria": "Tablets",
+      "imagen": "",
+      "precio_referencial": 1299000,
+      "color": "Gris grafito",
+      "descripcion": "14.6\" Dynamic AMOLED 2X, Snapdragon 8 Gen 3, S Pen incluido",
+      "fallas_comunes": [
+        "Pantalla rota",
+        "S Pen",
+        "Batería",
+        "Puerto carga"
+      ]
+    },
+    {
+      "id": "D010",
+      "nombre": "Samsung Galaxy Tab S9 FE",
+      "marca": "Samsung",
+      "categoria": "Tablets",
+      "imagen": "",
+      "precio_referencial": 499000,
+      "color": "Verde menta",
+      "descripcion": "10.9\" TFT LCD, Exynos 1380, batería 8000mAh",
+      "fallas_comunes": [
+        "Pantalla rota",
+        "Batería",
+        "Puerto USB-C",
+        "Botones"
+      ]
+    },
+    {
+      "id": "D011",
+      "nombre": "MacBook Pro 14\" M4",
+      "marca": "Apple",
+      "categoria": "Laptops",
+      "imagen": "/catalogo/D011.jpg",
+      "precio_referencial": 2299000,
+      "color": "Plata",
+      "descripcion": "Pantalla Liquid Retina XDR, chip M4 Pro, hasta 24 núcleos GPU",
+      "fallas_comunes": [
+        "No enciende",
+        "Pantalla dañada",
+        "Teclado roto",
+        "Puerto Thunderbolt"
+      ],
+      "fotoFuente": "https://www.ifixit.com/Guide/MacBook+Pro+14-Inch+Late+2024+(M4)+Lower+Case+Replacement/217918",
+      "fotoCredito": "Spencer Day y colaboradores / iFixit · CC BY-NC-SA 3.0",
+      "fotoLicencia": "https://creativecommons.org/licenses/by-nc-sa/3.0/"
+    },
+    {
+      "id": "D012",
+      "nombre": "MacBook Air 13\" M3",
+      "marca": "Apple",
+      "categoria": "Laptops",
+      "imagen": "/catalogo/D012.webp",
+      "precio_referencial": 1399000,
+      "color": "Medianoche",
+      "descripcion": "13.6\" Liquid Retina, chip M3, diseño ultradelgado sin ventilador",
+      "fallas_comunes": [
+        "Pantalla rota",
+        "No carga",
+        "Teclado",
+        "Trackpad no responde"
+      ],
+      "fotoFuente": "https://wiki.thirdparty.repair/guides/macbook-air-a3113-trackpad-and-or-keyboard-not-working/",
+      "fotoCredito": "VCCBoardRepairs y Samhext / Repair Wiki · CC BY-SA 3.0",
+      "fotoLicencia": "https://creativecommons.org/licenses/by-sa/3.0/"
+    },
+    {
+      "id": "D013",
+      "nombre": "Dell XPS 15",
+      "marca": "Dell",
+      "categoria": "Laptops",
+      "imagen": "/catalogo/D013.jpg",
+      "precio_referencial": 1599000,
+      "color": "Plata",
+      "descripcion": "15.6\" OLED 3.5K, Intel Core Ultra 9, NVIDIA GeForce RTX 4060",
+      "fallas_comunes": [
+        "No enciende",
+        "Pantalla dañada",
+        "Sobrecalentamiento",
+        "Teclado"
+      ],
+      "fotoFuente": "https://www.ifixit.com/Guide/Dell+XPS+15+9520+Back+Cover+Replacement/153709",
+      "fotoCredito": "Clay Eickemeyer y colaboradores / iFixit · CC BY-NC-SA 3.0",
+      "fotoLicencia": "https://creativecommons.org/licenses/by-nc-sa/3.0/"
+    },
+    {
+      "id": "D014",
+      "nombre": "ASUS ROG Zephyrus G14",
+      "marca": "ASUS",
+      "categoria": "Laptops",
+      "imagen": "/catalogo/D014.jpg",
+      "precio_referencial": 1299000,
+      "color": "Eclipse gris",
+      "descripcion": "14\" QHD+ 165Hz, AMD Ryzen 9, NVIDIA RTX 4060, AniMe Matrix LED",
+      "fallas_comunes": [
+        "Sobrecalentamiento",
+        "Pantalla",
+        "Batería",
+        "Ventiladores ruidosos"
+      ],
+      "fotoFuente": "https://www.ifixit.com/Guide/Asus+ROG+Zephyrus+G14+Battery+Replacement/165021#s347104",
+      "fotoCredito": "Omar Henriquez y colaboradores / iFixit · CC BY-NC-SA 3.0",
+      "fotoLicencia": "https://creativecommons.org/licenses/by-nc-sa/3.0/"
+    }
+  ],
+  "servicios": [
+    {
+      "id": "SE001",
+      "nombre": "Diagnóstico",
+      "descripcion": "Evaluación completa del dispositivo para identificar fallas.",
+      "tiempoEstimado": 30,
+      "precio": 15000,
+      "categoria": "General",
+      "icono": "",
+      "imagen": "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&q=80",
+      "enOferta": false,
+      "descuento": 0
+    },
+    {
+      "id": "SE002",
+      "nombre": "Reparación de pantalla",
+      "descripcion": "Cambio de pantalla rota de smartphone o tablet con garantía.",
+      "tiempoEstimado": 60,
+      "precio": 40000,
+      "categoria": "Pantallas",
+      "icono": "",
+      "imagen": "https://images.unsplash.com/photo-1601972599720-36938d4ecd31?w=400&q=80",
+      "enOferta": true,
+      "descuento": 10
+    },
+    {
+      "id": "SE003",
+      "nombre": "Reparación de batería",
+      "descripcion": "Cambio de batería de smartphone, tablet o laptop original.",
+      "tiempoEstimado": 45,
+      "precio": 25000,
+      "categoria": "Baterías",
+      "icono": "",
+      "imagen": "https://images.unsplash.com/photo-1609592424921-83b9b65ee44e?w=400&q=80",
+      "enOferta": false,
+      "descuento": 0
+    },
+    {
+      "id": "SE004",
+      "nombre": "Limpieza de software",
+      "descripcion": "Eliminación de virus, malware y optimización del sistema.",
+      "tiempoEstimado": 60,
+      "precio": 20000,
+      "categoria": "Software",
+      "icono": "",
+      "imagen": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&q=80",
+      "enOferta": true,
+      "descuento": 15
+    },
+    {
+      "id": "SE005",
+      "nombre": "Reparación de placa",
+      "descripcion": "Reparación de componentes electrónicos en placa base.",
+      "tiempoEstimado": 120,
+      "precio": 60000,
+      "categoria": "Hardware",
+      "icono": "",
+      "imagen": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=80",
+      "enOferta": false,
+      "descuento": 0
+    },
+    {
+      "id": "SE006",
+      "nombre": "Instalación de SO",
+      "descripcion": "Instalación y configuración de Windows 11, macOS o Linux.",
+      "tiempoEstimado": 90,
+      "precio": 30000,
+      "categoria": "Software",
+      "icono": "",
+      "imagen": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&q=80",
+      "enOferta": false,
+      "descuento": 0
+    },
+    {
+      "id": "SE007",
+      "nombre": "Limpieza física",
+      "descripcion": "Limpieza interna, pasta térmica y mantenimiento preventivo.",
+      "tiempoEstimado": 45,
+      "precio": 18000,
+      "categoria": "Hardware",
+      "icono": "",
+      "imagen": "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&q=80",
+      "enOferta": true,
+      "descuento": 20
+    }
+  ],
+  "categorias": [
+    {
+      "id": 1,
+      "nombre": "Smartphones",
+      "icono": "",
+      "imagen": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=300&q=80",
+      "descripcion": "iPhone, Samsung, Xiaomi, Google y más."
+    },
+    {
+      "id": 2,
+      "nombre": "Laptops",
+      "icono": "",
+      "imagen": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=300&q=80",
+      "descripcion": "MacBook, Dell, ASUS, Lenovo y más."
+    },
+    {
+      "id": 3,
+      "nombre": "Tablets",
+      "icono": "",
+      "imagen": "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=300&q=80",
+      "descripcion": "iPad, Samsung Galaxy Tab y más."
+    },
+    {
+      "id": 4,
+      "nombre": "Software",
+      "icono": "",
+      "imagen": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=300&q=80",
+      "descripcion": "SO, virus, optimización y respaldo."
+    },
+    {
+      "id": 5,
+      "nombre": "Hardware",
+      "icono": "",
+      "imagen": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=300&q=80",
+      "descripcion": "Placa base, RAM, almacenamiento."
+    }
+  ],
+  "repuestos": [
+    {
+      "id": "RP001",
+      "nombre": "Pantalla iPhone 15",
+      "compatible": "iPhone 15",
+      "precio": 89000,
+      "stock": 8,
+      "imagen": "/catalogo/RP001.jpg",
+      "fotoFuente": "https://www.ifixit.com/Guide/iPhone+15+Screen+Replacement/165669#s401464",
+      "fotoCredito": "Clay Eickemeyer y colaboradores / iFixit · CC BY-NC-SA 3.0",
+      "fotoLicencia": "https://creativecommons.org/licenses/by-nc-sa/3.0/"
+    },
+    {
+      "id": "RP002",
+      "nombre": "Pantalla iPhone 14",
+      "compatible": "iPhone 14",
+      "precio": 75000,
+      "stock": 12,
+      "imagen": "/catalogo/RP002.jpg",
+      "fotoFuente": "https://www.ifixit.com/Guide/iPhone+14+Screen+Replacement/152975#s333365",
+      "fotoCredito": "Tobias Isakeit y colaboradores / iFixit · CC BY-NC-SA 3.0",
+      "fotoLicencia": "https://creativecommons.org/licenses/by-nc-sa/3.0/"
+    },
+    {
+      "id": "RP003",
+      "nombre": "Pantalla iPhone 13",
+      "compatible": "iPhone 13",
+      "precio": 65000,
+      "stock": 15,
+      "imagen": "/catalogo/RP003.jpg",
+      "fotoFuente": "https://www.ifixit.com/Guide/iPhone+13+Screen+Replacement/145897#s300462",
+      "fotoCredito": "Kyle Smith y colaboradores / iFixit · CC BY-NC-SA 3.0",
+      "fotoLicencia": "https://creativecommons.org/licenses/by-nc-sa/3.0/"
+    },
+    {
+      "id": "RP004",
+      "nombre": "Pantalla Samsung S24",
+      "compatible": "Samsung Galaxy S24",
+      "precio": 79000,
+      "stock": 6,
+      "imagen": "/catalogo/RP004.jpg",
+      "fotoFuente": "https://www.ifixit.com/Guide/Samsung+Galaxy+S24+Screen+Replacement/175579#s374908",
+      "fotoCredito": "Nick Schultz y colaboradores / iFixit · CC BY-NC-SA 3.0",
+      "fotoLicencia": "https://creativecommons.org/licenses/by-nc-sa/3.0/"
+    },
+    {
+      "id": "RP005",
+      "nombre": "Pantalla Samsung S23",
+      "compatible": "Samsung Galaxy S23",
+      "precio": 65000,
+      "stock": 9,
+      "imagen": "/catalogo/RP005.jpg",
+      "fotoFuente": "https://www.ifixit.com/Guide/Samsung+Galaxy+S23+Screen+Replacement/175309",
+      "fotoCredito": "Alex Diaz-Kokaisl y colaboradores / iFixit · CC BY-NC-SA 3.0",
+      "fotoLicencia": "https://creativecommons.org/licenses/by-nc-sa/3.0/"
+    },
+    {
+      "id": "RP006",
+      "nombre": "Batería iPhone 15",
+      "compatible": "iPhone 15",
+      "precio": 35000,
+      "stock": 20,
+      "imagen": "/catalogo/RP006.jpg",
+      "fotoFuente": "https://www.ifixit.com/Guide/iPhone+15+Battery+Replacement/165733#s401386",
+      "fotoCredito": "Clay Eickemeyer y colaboradores / iFixit · CC BY-NC-SA 3.0",
+      "fotoLicencia": "https://creativecommons.org/licenses/by-nc-sa/3.0/"
+    },
+    {
+      "id": "RP007",
+      "nombre": "Batería iPhone 14",
+      "compatible": "iPhone 14",
+      "precio": 28000,
+      "stock": 18,
+      "imagen": "/catalogo/RP007.jpg",
+      "fotoFuente": "https://www.ifixit.com/Guide/iPhone+14+Battery+Replacement/152966#s317887",
+      "fotoCredito": "Tobias Isakeit y colaboradores / iFixit · CC BY-NC-SA 3.0",
+      "fotoLicencia": "https://creativecommons.org/licenses/by-nc-sa/3.0/"
+    },
+    {
+      "id": "RP008",
+      "nombre": "Batería Samsung S24",
+      "compatible": "Samsung Galaxy S24",
+      "precio": 25000,
+      "stock": 14,
+      "imagen": "/catalogo/RP008.jpg",
+      "fotoFuente": "https://www.ifixit.com/Guide/Samsung+Galaxy+S24+Battery+Replacement/175612#s374379",
+      "fotoCredito": "Nick Schultz y colaboradores / iFixit · CC BY-NC-SA 3.0",
+      "fotoLicencia": "https://creativecommons.org/licenses/by-nc-sa/3.0/"
+    },
+    {
+      "id": "RP009",
+      "nombre": "Batería MacBook Air M2",
+      "compatible": "MacBook Air M2",
+      "precio": 95000,
+      "stock": 5,
+      "imagen": "/catalogo/RP009.jpg",
+      "fotoFuente": "https://www.ifixit.com/Guide/MacBook+Air+2022+(M2)+Battery+Replacement/156332#s327229",
+      "fotoCredito": "Spencer Day y colaboradores / iFixit · CC BY-NC-SA 3.0",
+      "fotoLicencia": "https://creativecommons.org/licenses/by-nc-sa/3.0/"
+    },
+    {
+      "id": "RP010",
+      "nombre": "Disco SSD 512GB NVMe",
+      "compatible": "Laptop universal",
+      "precio": 65000,
+      "stock": 10,
+      "imagen": "/catalogo/RP010.jpg",
+      "fotoFuente": "https://commons.wikimedia.org/wiki/File:Raspberry-Pi-SSD-Feature_(cropped)_512GB_NVMe.jpg",
+      "fotoCredito": "SparkFun Electronics · CC BY 2.0",
+      "fotoLicencia": "https://creativecommons.org/licenses/by/2.0/"
+    },
+    {
+      "id": "RP011",
+      "nombre": "Pantalla iPad Air M2",
+      "compatible": "iPad Air M2",
+      "precio": 120000,
+      "stock": 4,
+      "imagen": "/catalogo/RP011.jpg",
+      "fotoFuente": "https://www.ifixit.com/Guide/iPad+Air+6+11-Inch+Screen+Replacement/226892#s444050",
+      "fotoCredito": "Arthur Shi y colaboradores / iFixit · CC BY-NC-SA 3.0",
+      "fotoLicencia": "https://creativecommons.org/licenses/by-nc-sa/3.0/"
+    },
+    {
+      "id": "RP012",
+      "nombre": "Pantalla Samsung Tab S9",
+      "compatible": "Galaxy Tab S9",
+      "precio": 85000,
+      "stock": 3,
+      "imagen": "/catalogo/RP012.jpg",
+      "fotoFuente": "https://www.ifixit.com/Guide/Samsung+Galaxy+Tab+S9+Display+Replacement/178997#s381210",
+      "fotoCredito": "Nigel y colaboradores / iFixit · CC BY-NC-SA 3.0",
+      "fotoLicencia": "https://creativecommons.org/licenses/by-nc-sa/3.0/"
+    }
+  ],
+  "ordenes": [
+    {
+      "id": "OT-001",
+      "clienteId": 1,
+      "tecnicoId": 1,
+      "dispositivo": "iPhone 15",
+      "marca": "Apple",
+      "falla": "Pantalla rota",
+      "servicioId": "SE002",
+      "repuestosUsados": [
+        "RP002"
+      ],
+      "estado": "En reparación",
+      "prioridad": "Alta",
+      "fechaIngreso": "2024-01-15",
+      "fechaEstimada": "2024-01-15",
+      "diagnostico": "Pantalla dañada por impacto lateral.",
+      "notas": "Caída desde 1m.",
+      "costoTotal": 129000
+    },
+    {
+      "id": "OT-002",
+      "clienteId": 2,
+      "tecnicoId": 2,
+      "dispositivo": "MacBook Air M3",
+      "marca": "Apple",
+      "falla": "No enciende",
+      "servicioId": "SE001",
+      "repuestosUsados": [],
+      "estado": "En diagnóstico",
+      "prioridad": "Media",
+      "fechaIngreso": "2024-01-15",
+      "fechaEstimada": "2024-01-16",
+      "diagnostico": "En evaluación.",
+      "notas": "",
+      "costoTotal": 15000
+    },
+    {
+      "id": "OT-003",
+      "clienteId": 3,
+      "tecnicoId": 3,
+      "dispositivo": "Samsung Galaxy Tab S9",
+      "marca": "Samsung",
+      "falla": "Batería dura muy poco",
+      "servicioId": "SE003",
+      "repuestosUsados": [
+        "RP012"
+      ],
+      "estado": "Listo para retirar",
+      "prioridad": "Baja",
+      "fechaIngreso": "2024-01-14",
+      "fechaEstimada": "2024-01-15",
+      "diagnostico": "Batería degradada al 38%.",
+      "notas": "Cliente avisado.",
+      "costoTotal": 110000
+    },
+    {
+      "id": "OT-004",
+      "clienteId": 4,
+      "tecnicoId": 4,
+      "dispositivo": "iPhone 16 Pro",
+      "marca": "Apple",
+      "falla": "No carga",
+      "servicioId": "SE005",
+      "repuestosUsados": [],
+      "estado": "Recibido",
+      "prioridad": "Alta",
+      "fechaIngreso": "2024-01-15",
+      "fechaEstimada": "2024-01-17",
+      "diagnostico": "",
+      "notas": "Urgente, cliente espera.",
+      "costoTotal": 60000
+    },
+    {
+      "id": "OT-005",
+      "clienteId": 1,
+      "tecnicoId": 5,
+      "dispositivo": "Samsung Galaxy S24",
+      "marca": "Samsung",
+      "falla": "Pantalla con líneas",
+      "servicioId": "SE002",
+      "repuestosUsados": [
+        "RP004"
+      ],
+      "estado": "Cancelado",
+      "prioridad": "Media",
+      "fechaIngreso": "2024-01-10",
+      "fechaEstimada": "2024-01-12",
+      "diagnostico": "Cancelado por cliente.",
+      "notas": "",
+      "costoTotal": 0
+    }
+  ],
+  "blogs": [
+    {
+      "id": 1,
+      "titulo": "¿Cómo saber si tu batería necesita cambio?",
+      "tag": "Consejos",
+      "fecha": "2024-01-10",
+      "imagen": "https://images.unsplash.com/photo-1609592424921-83b9b65ee44e?w=600&q=80",
+      "resumen": "Señales claras de que tu batería ya no rinde como antes y cuándo es el momento de reemplazarla.",
+      "contenido": "Una batería en mal estado puede afectar el rendimiento de tu dispositivo. Si notas que se descarga rápido, se calienta en exceso o el dispositivo se apaga solo, es hora de un cambio. En ReparaTech contamos con baterías originales y compatibles para la mayoría de modelos. El proceso toma menos de una hora y ofrecemos 6 meses de garantía."
+    },
+    {
+      "id": 2,
+      "titulo": "5 cosas que NO debes hacer si se rompe tu pantalla",
+      "tag": "Tutoriales",
+      "fecha": "2024-01-08",
+      "imagen": "https://images.unsplash.com/photo-1601972599720-36938d4ecd31?w=600&q=80",
+      "resumen": "Errores comunes que empeoran el daño en la pantalla de tu smartphone y cómo evitarlos.",
+      "contenido": "Cuando se rompe la pantalla, el pánico lleva a cometer errores costosos. Evita: seguir usando el dispositivo con vidrios sueltos, intentar pegar la pantalla con cinta adhesiva, exponer el equipo a agua, desarmarlo sin experiencia, y esperar demasiado para repararlo. Visítanos y lo resolvemos el mismo día con repuestos originales."
+    },
+    {
+      "id": 3,
+      "titulo": "Guía para cuidar tu laptop y alargar su vida útil",
+      "tag": "Guías",
+      "fecha": "2024-01-05",
+      "imagen": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&q=80",
+      "resumen": "Consejos prácticos para mantener tu laptop en buen estado y evitar costosas reparaciones.",
+      "contenido": "Limpia el ventilador cada 6 meses, mantén el sistema operativo actualizado, usa el cargador original, no bloquees los ventiladores y realiza limpiezas de software periódicas. Con estos simples hábitos puedes extender la vida de tu laptop varios años más."
+    },
+    {
+      "id": 4,
+      "titulo": "¿Vale la pena reparar o comprar nuevo?",
+      "tag": "Consejos",
+      "fecha": "2024-01-02",
+      "imagen": "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=600&q=80",
+      "resumen": "Cómo tomar la mejor decisión económica cuando tu dispositivo falla.",
+      "contenido": "Antes de comprar un equipo nuevo, considera el costo de reparación vs el valor del equipo. Si la reparación cuesta menos del 50% del valor del equipo, generalmente vale la pena. En ReparaTech hacemos diagnósticos gratuitos para ayudarte a decidir. Trabajamos con garantía en todas nuestras reparaciones."
+    }
+  ],
+  "usuarios": [
+    {
+      "id": 1,
+      "nombre": "Admin",
+      "apellido": "Sistema",
+      "correo": "admin@reparatech.cl",
+      "rol": "administrador"
+    },
+    {
+      "id": 2,
+      "nombre": "María",
+      "apellido": "González",
+      "correo": "recepcion@reparatech.cl",
+      "rol": "recepcionista"
+    },
+    {
+      "id": 3,
+      "nombre": "Juan",
+      "apellido": "Encargado",
+      "correo": "encargado@reparatech.cl",
+      "rol": "encargado"
+    }
+  ],
+  "contadores": {
+    "clientes": 5,
+    "ordenes": 6,
+    "usuarios": 4,
+    "tecnicos": 7,
+    "categorias": 6
+  }
+}
