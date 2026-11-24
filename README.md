@@ -80,7 +80,7 @@ Las fotos de iFixit se incluyen para esta demostración académica no comercial.
 | Pantalla Samsung Tab S9 | [Nigel y colaboradores / iFixit](https://www.ifixit.com/Guide/Samsung+Galaxy+Tab+S9+Display+Replacement/178997#s381210) | [CC BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/) | Incluida en ZIP. Pantalla levantada durante la reparación |
 | MacBook Air 13 pulgadas M3 | [VCCBoardRepairs y Samhext, Repair Wiki](https://wiki.thirdparty.repair/guides/macbook-air-a3113-trackpad-and-or-keyboard-not-working/) | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) | Incluida en ZIP. Equipo desmontado, modelo A3113 |
 
-Fotos pendientes de verificar y licenciar para el ZIP: Galaxy Tab S10 Ultra y Galaxy Tab S9 FE. Wikimedia devolvió HTTP 429 durante la descarga, por lo que sus seis fichas conservan enlaces externos.
+Las fichas de Galaxy Tab S10 Ultra y Galaxy Tab S9 FE muestran imágenes oficiales de producto servidas por Samsung para la demostración académica. Requieren internet. Fuente: [Galaxy Tab S10 Ultra](https://www.samsung.com/ie/tablets/galaxy-tab-s/galaxy-tab-s10-ultra-grey-512gb-wi-fi-sm-x920nzapeub/) y [Galaxy Tab S9 FE](https://www.samsung.com/latin/tablets/galaxy-tab-s/galaxy-tab-s9-fe-wifi-gray-128gb-sm-x510nzaagto/). Wikimedia devolvió HTTP 429 durante la descarga, por lo que sus seis fichas conservan enlaces externos.
 
 ## Resultado de la verificación
 

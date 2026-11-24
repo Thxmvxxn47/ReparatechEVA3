@@ -57,6 +57,30 @@ function Img({ src, alt, style, fallback, fit = 'cover', loading = 'lazy' }) {
   )
 }
 
+const fichasSamsung = {
+  D009: 'https://www.samsung.com/cl/tablets/galaxy-tab-s10/buy/?modelCode=SM-X920NZAHCHO',
+  D010: 'https://www.samsung.com/cl/support/model/SM-X510NZAACHO/',
+}
+
+const imagenesSamsung = {
+  D009: 'https://images.samsung.com/is/image/samsung/p6pim/ie/sm-x920nzapeub/gallery/ie-galaxy-tab-s10-ultra-sm-x920-524326-sm-x920nzapeub-543696618?wid=640&fmt=webp',
+  D010: 'https://images.samsung.com/is/image/samsung/p6pim/latin/sm-x510nzaagto/gallery/latin-galaxy-tab-s9-fe-sm-x510-sm-x510nzaagto-thumb-538724745?wid=640&fmt=webp',
+}
+const imagenEquipo = equipo => equipo.imagen || imagenesSamsung[equipo.id]
+
+function FotoEquipo({ equipo, ...opciones }) {
+  const imagen = imagenEquipo(equipo)
+  const ficha = fichasSamsung[equipo.id]
+  const alternativa = ficha ? (
+    <a href={ficha} target="_blank" rel="noreferrer" onClick={event => event.stopPropagation()}
+      className="btn-rt btn-ghost-rt" aria-label={`Consultar fotos oficiales de ${equipo.nombre}`}>
+      Ver fotos en Samsung
+    </a>
+  ) : 'Foto pendiente'
+
+  return <Img key={imagen} src={imagen} alt={equipo.nombre} fallback={alternativa} {...opciones} />
+}
+
 export function HomePage({ onNav, onAddCart }) {
   const servicios = serviciosDB.getAll().slice(0, 4)
   const categorias = categoriasDB.getAll()
@@ -334,7 +358,7 @@ export function HomePage({ onNav, onAddCart }) {
               }}
               onClick={() => onNav('servicios', d.categoria)}
             >
-              <Img src={d.imagen} alt={d.nombre} style={{ width: '100%', height: 130 }} fallback="Foto pendiente" />
+              <FotoEquipo equipo={d} style={{ width: '100%', height: 130 }} />
               <div style={{ padding: '10px' }}>
                 <div style={{ fontWeight: 700, fontSize: '0.83rem' }}>{d.nombre}</div>
                 <div style={{ fontSize: '0.72rem', color: '#6b7280' }}>
@@ -477,7 +501,7 @@ export function ServiciosPage({ onNav, onAddCart, onAddEquipo, categoriaInicial 
     const archivos = new Set(
       dispositivosDB.getAll()
         .filter(equipo => Object.hasOwn(categoriasDeVenta, equipo.categoria))
-        .map(equipo => equipo.imagen)
+        .map(imagenEquipo)
         .filter(Boolean)
     )
     const precargar = () => {
@@ -567,9 +591,9 @@ export function ServiciosPage({ onNav, onAddCart, onAddEquipo, categoriaInicial 
               .map(equipo => (
                 <article className="service-card sale-card" key={equipo.id}>
                   <div className="sale-card-media">
-                    <Img key={equipo.imagen} src={equipo.imagen} alt={equipo.nombre}
+                    <FotoEquipo equipo={equipo}
                       style={{ width: '100%', height: '100%', display: 'block' }}
-                      fit="contain" loading="eager" fallback="Foto pendiente" />
+                      fit="contain" loading="eager" />
                   </div>
                   <div className="sc-body">
                     <h4 className="sc-name">{equipo.nombre}</h4>
@@ -882,12 +906,7 @@ export function CategoriasPage({ onAddCart }) {
                       overflow: 'hidden',
                     }}
                   >
-                    <Img
-                      src={d.imagen}
-                      alt={d.nombre}
-                      style={{ width: '100%', height: 110 }}
-                      fallback="Foto pendiente"
-                    />
+                    <FotoEquipo equipo={d} style={{ width: '100%', height: 110 }} />
                     <div style={{ padding: '8px 10px' }}>
                       <div style={{ fontWeight: 700, fontSize: '0.78rem' }}>{d.nombre}</div>
                       <div style={{ fontSize: '0.7rem', color: '#6b7280' }}>{d.marca}</div>
@@ -1881,7 +1900,7 @@ export function ComprarEquipoPage({ carrito, cliente, onNav, onComprado }) {
         <ul className="purchase-products">
           {resumen.map(({ item, cantidad }) => (
             <li key={item.id}>
-              <Img src={item.imagen} alt="" fit="contain" fallback="Sin foto"
+              <Img src={imagenEquipo(item)} alt="" fit="contain" fallback="Sin foto"
                 style={{ width: 72, height: 58, display: 'block' }} />
               <div>
                 <strong>{item.nombre}</strong>
