@@ -140,6 +140,58 @@ public class RegistroController {
             HttpStatus.BAD_REQUEST,
             "Cliente sin ficha"
         );
+        if (data.has("equipoIds") || data.has("equipoId") || data.has("telefonoId")) {
+            var ids = data.path("equipoIds");
+            if (!data.has("equipoIds")) {
+                ids = data.arrayNode().add(data.path("equipoId").asText(data.path("telefonoId").asText("")));
+            }
+            if (!ids.isArray() || ids.isEmpty() || ids.size() + data.path("servicioIds").size() > 30)
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Agrega entre uno y 30 equipos");
+            var productos = data.arrayNode();
+            var nombres = new java.util.ArrayList<String>();
+            long total = 0;
+            for (var id : ids) {
+                if (!id.isTextual() || id.asText().isBlank())
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Equipo inválido");
+                String equipoId = id.asText().strip();
+                ObjectNode equipo = s.one("dispositivos", equipoId);
+                long precio = equipo.path("precio_referencial").asLong();
+                if (!Set.of("Smartphones", "Laptops", "Tablets").contains(equipo.path("categoria").asText()) || precio <= 0)
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Equipo no disponible para la venta de demostración");
+                String nombre = equipo.path("nombre").asText();
+                productos.addObject().put("equipoId", equipoId).put("nombre", nombre).put("precio", precio);
+                nombres.add(nombre);
+                total += precio;
+            }
+            ObjectNode compra = data.objectNode();
+            compra.put("tipoOrden", "Compra");
+            if (ids.size() == 1) compra.put("equipoId", ids.get(0).asText().strip());
+            compra.set("productos", productos);
+            compra.put("dispositivo", String.join(", ", nombres));
+            compra.put("falla", "Compra de equipos de demostración");
+            if (data.has("servicioIds")) {
+                total += agregarServicios(data, compra);
+                compra.put("tipoOrden", "Compra y reparación");
+                compra.put("dispositivo", String.join(", ", nombres) + " · Reparación: "
+                    + compra.path("dispositivo").asText());
+            }
+            compra.put("costoTotal", total);
+            if (data.has("direccionEntrega") || data.has("comunaEntrega")) {
+                String direccion = data.path("direccionEntrega").asText("").strip();
+                String comuna = data.path("comunaEntrega").asText("").strip();
+                if (direccion.isEmpty() || direccion.length() > 160 || comuna.isEmpty() || comuna.length() > 80)
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Revisa la dirección y comuna de entrega");
+                compra.put("direccionEntrega", direccion);
+                compra.put("comunaEntrega", comuna);
+            }
+            return registrarOrdenCliente(compra, u.clienteId);
+        }
+        ObjectNode reparacion = data.objectNode();
+        reparacion.put("costoTotal", agregarServicios(data, reparacion));
+        return registrarOrdenCliente(reparacion, u.clienteId);
+    }
+
+    private long agregarServicios(ObjectNode data, ObjectNode orden) {
         String dispositivo = data.path("dispositivo").asText("").strip();
         String falla = data.path("falla").asText("").strip();
         var servicios = data.path("servicioIds");
@@ -156,14 +208,16 @@ public class RegistroController {
             int descuento = servicio.path("enOferta").asBoolean() ? servicio.path("descuento").asInt() : 0;
             total += Math.round(precio * (100 - descuento) / 100.0);
         }
-        ObjectNode n = data.objectNode();
-        n.put("dispositivo", dispositivo);
-        n.put("falla", falla);
-        n.put("clienteId", u.clienteId);
+        orden.put("dispositivo", dispositivo);
+        orden.put("falla", falla);
+        orden.put("servicioId", servicios.get(0).asText());
+        orden.set("servicioIds", servicios);
+        return total;
+    }
+
+    private ResponseEntity<ObjectNode> registrarOrdenCliente(ObjectNode n, Long clienteId) {
+        n.put("clienteId", clienteId);
         n.put("estado", "Recibido");
-        n.put("servicioId", servicios.get(0).asText());
-        n.set("servicioIds", servicios);
-        n.put("costoTotal", total);
         n.put("fechaIngreso", java.time.LocalDate.now().toString());
         n.put("prioridad", "Media");
         return ResponseEntity.status(201).body(s.create("ordenes", n));

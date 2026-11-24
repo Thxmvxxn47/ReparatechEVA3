@@ -90,4 +90,53 @@ class ApiIntegrationTests {
             .andExpect(jsonPath("$.estado").value("Recibido"))
             .andExpect(jsonPath("$.costoTotal", org.hamcrest.Matchers.greaterThan(1)));
     }
+
+    @Test
+    void clientePuedeComprarTelefonosLaptopsYTabletsAlPrecioDelCatalogo() throws Exception {
+        String token = login("rodrigo.chacon@reparatech.cl", "1234", "cliente", "Rodrigo");
+        var precios = java.util.Map.of("D001", 1199000, "D013", 1599000, "D008", 799000);
+        for (var equipo : precios.entrySet()) {
+            mvc.perform(post("/api/mis-ordenes").header("Authorization", token).contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {"equipoId":"%s","costoTotal":1,"clienteId":2,"direccionEntrega":"Av. Demo 123","comunaEntrega":"Santiago"}
+                    """.formatted(equipo.getKey())))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.tipoOrden").value("Compra"))
+                .andExpect(jsonPath("$.equipoId").value(equipo.getKey()))
+                .andExpect(jsonPath("$.costoTotal").value(equipo.getValue()))
+                .andExpect(jsonPath("$.direccionEntrega").value("Av. Demo 123"))
+                .andExpect(jsonPath("$.comunaEntrega").value("Santiago"))
+                .andExpect(jsonPath("$.clienteId").value(1));
+        }
+    }
+
+    @Test
+    void carritoDeEquiposSeGuardaEnUnaOrdenConPreciosDelCatalogo() throws Exception {
+        String token = login("rodrigo.chacon@reparatech.cl", "1234", "cliente", "Rodrigo");
+        mvc.perform(post("/api/mis-ordenes").header("Authorization", token).contentType(MediaType.APPLICATION_JSON)
+            .content("""
+                {"equipoIds":["D001","D013","D001"],"costoTotal":1,
+                 "direccionEntrega":"Calle Demo 123","comunaEntrega":"Santiago"}
+                """))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.productos.length()").value(3))
+            .andExpect(jsonPath("$.productos[1].equipoId").value("D013"))
+            .andExpect(jsonPath("$.costoTotal").value(3997000))
+            .andExpect(jsonPath("$.direccionEntrega").value("Calle Demo 123"));
+    }
+
+    @Test
+    void registraEquipoYReparacionEnUnaSolaOrden() throws Exception {
+        String token = login("rodrigo.chacon@reparatech.cl", "1234", "cliente", "Rodrigo");
+        mvc.perform(post("/api/mis-ordenes").header("Authorization", token).contentType(MediaType.APPLICATION_JSON)
+            .content("""
+                {"equipoIds":["D001"],"servicioIds":["SE002"],"dispositivo":"iPhone 15",
+                 "falla":"Pantalla rota","direccionEntrega":"Calle Demo 123","comunaEntrega":"Santiago"}
+                """))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.tipoOrden").value("Compra y reparación"))
+            .andExpect(jsonPath("$.productos[0].equipoId").value("D001"))
+            .andExpect(jsonPath("$.servicioIds[0]").value("SE002"))
+            .andExpect(jsonPath("$.costoTotal").value(1235000));
+    }
 }
